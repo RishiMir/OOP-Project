@@ -482,20 +482,19 @@ void addcommemt{
 	cout <<"Enter username"<<endl;
 	getline(cin,username);
 	cout << "Enter comment text "<<endl;
-	getline(cin,taggeduser);
-	if (commentText.empty() || commentText.back() != '.') {
-            cout << "Invalid comment. Must end with a full stop ('.'). Try again." << endl;
+	getline(cin,commenttext);
+	if (commentText.empty()) {
+            cout << "Invalid comment.Try again." << endl;
             return;
         }
-
-        // Optional tagging
+// file handling to find post 
         char choice;
         cout << "Do you want to tag a user? (y/n): ";
         cin >> choice;
         cin.ignore(); // Clear input buffer
         if (choice == 'y' || choice == 'Y') {
             cout << "Enter the username to tag: ";
-            getline(cin, taggedUser);
+            getline(cin,taggedUser);
         } else {
             taggedUser = "None";
         }
