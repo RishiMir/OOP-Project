@@ -636,6 +636,8 @@ public:
 		  taggedUser = "None";
 	  }
 	}
+};
+
 
 //File Handling commands
 //ifstream->Read
