@@ -703,8 +703,12 @@ private:
 	string taggeduser;
 public:
 	void addcommemt(){
-		cout << "Enter username" << endl;
+		// input of post
+		bool isValid=false;
+		do{
+		cout << "Enter Post Number" << endl;
 		getline(cin,username);
+	
 		cout << "Enter comment text " << endl;
 		getline(cin,commenttext);
 		if (commentText.empty()) {
@@ -723,7 +727,7 @@ public:
 		 else {
 		  taggedUser = "None";
 	  }
-	}
+	}while(!isValid);
 };
 
 
