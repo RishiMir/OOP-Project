@@ -254,54 +254,87 @@ public:
 	int A, B, Day, Month, Year;
        	ofstream CEP;
 	void setDateOfCreation() {
-		cout << "Enter the date in dd/mm/yyyy format: ";
-		cin >> Doc;
+		string Doc;
+		int Day, Month, Year;
+		bool isValid = false;
+		do {
+			cout << "Enter the date in dd/mm/yyyy format: ";
+			cin >> Doc;
 
-
-		for (char& ch : Doc) {
-			if (ch == '/') {
-				ch = ' ';
+			for (char& ch : Doc) {
+				if (ch == '/') {
+					ch = ' ';
+				}
 			}
-		}
+			istringstream dateStream(Doc);
+			dateStream >> Day >> Month >> Year;
 
-		istringstream dateStream(Doc);
-		dateStream >> Day >> Month >> Year;
-
-		if (dateStream.fail() || Day < 1 || Day > 31 || Month < 1 || Month > 12 || Year > 2024) {
-			cout << "Invalid date format!" << endl;
-		}
-		else {
-			isValid = true;
+			if ( Day >= 1 && Day <= 31 && Month >= 1 && Month <= 12 && Year <= 2024) {
+				isValid = true;
 				doc = Doc;
-			CEP.open("sample.txt");
+				CEP.open("sample.txt");
 				CEP << ("Date:", doc);
 				CEP.close();
 				cout << "Data written in file Successfully";
-		}
+			}
+			else {
+				cout << "Invalid date format! Please try again." << endl;
+			}
+		} while (!isValid);
+
+	}
+
+		
 	}
 	void set_Username() {
-		cout << "Enter your Username for page creation" << endl;
-		getline(cin, a);
+		string a;
+		bool isValid;
+
+		do {
+			isValid = true;
+			cout << "Enter your Username for account creation (Only alphanumeric characters and '_' are allowed): " << endl;
+			getline(cin, a);
+			for (char ch : a) {
+				if (!isalnum(ch) && ch != '_') {
+					isValid = false; // Invalid character
+					cout << "Invalid username! Only letters, digits, and '_' are allowed. Please try again." << endl;
+					break;
+				}
+			}
+		} while (!isValid);
+
 		Username = a;
+//Apply File Handling
 		CEP.open("sample.txt");
 		CEP << ("Username:", Username);
 		CEP.close();
 		cout << "Data written in file Successfully";
+
 	}
 	void set_Password() {
-		cout << "Set your 4 number pin" << endl;
-		cin >> A;
-		if (A > 999 && A < 10000) {
-			password = A;
-			 CEP.open("sample.txt");
+		string input;
+		bool isValid = false;
+
+		do {
+			cout << "Set your 4-digit password (numbers only): ";
+			cin >> input;
+
+			// Check if input is exactly 4 characters long and all digits
+			if (input.length() == 4 && all_of(input.begin(), input.end(), ::isdigit)) {
+				password = stoi(input); // Convert valid input to an integer
+				isValid = true;
+				cout << "password set successfully!" << endl;
+				//File Handling
+				CEP.open("sample.txt");
 				CEP << ("password:", password);
 				CEP.close();
-				cout << "PIN set successfully" << end
-		}
-		else if (A < 999 || A > 10000) {
-			cout << "Invalid pin" << endl;
-		}
-		        
+				cout << "PIN set successfully" << endl;
+			}
+			else {
+				cout << "Re-Enter Password" << endl;
+			}
+		} while (!isValid);
+
 	}
 	void set_Email() {
 		cout << "Enter your Email for page creation" << endl;
@@ -313,14 +346,23 @@ public:
 		cout << "Email set successfully" << endl;
 	}
 	void set_phno() {
-		cout << "Enter Your Phone Number" << endl;
-		cin >> B;
-		if (B / 10000000000 == 0 && B / 1000000000 == 3 && B < 1000000000000 && B>10000000000) {
-			phno = B;
-		}
-		else {
-			cout << "Invalid Number" << endl;
-		}
+			string input;
+		bool isValid = false;
+
+		do {
+			cout << "Enter Your Phone Number (11 digits starting with 3): ";
+			cin >> input;
+
+			// Check if input contains only digits
+			if (input.length() == 11 && input[0] == '0'&&input[1] == '3' && all_of(input.begin(), input.end(), ::isdigit)) {
+				isValid = true; // Valid input
+				phno = stoll(input); // Convert valid string to a long long integer
+			}
+			else {
+				cout << "Invalid Number! Please try again." << endl;
+			}
+		} while (!isValid);
+
 		// Write phone number to a file
 		ofstream CEP("sample.txt", ios::app);
 		if (CEP.is_open()) {
@@ -332,20 +374,12 @@ public:
 			cout << "Error saving Phone Number to file!" << endl;
 		}
 	}
-	//apply file handling for class/file user and use inheritance for class user and page.
-	friend class Sign_in_Page;
-};
 
-
-
-class Sign_in_Page {
 private:
 	string User_name;
 	int pass_word;
 
 public:
-	friend class Sign_up_Page;
-
 	void Check_Username_pass() {
 	int attempts = 3;  
 
@@ -640,12 +674,6 @@ public:
 
 };
 
-class comment {
-private:
-
-public:
-
-};
 //for Page only
 class highlights {
 	void add_high() {
