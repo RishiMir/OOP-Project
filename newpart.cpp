@@ -252,6 +252,7 @@ private:
 public:
 	string a, b, str1, Doc;
 	int A, B, Day, Month, Year;
+       	ofstream CEP;
 	void setDateOfCreation() {
 		cout << "Enter the date in dd/mm/yyyy format: ";
 		cin >> Doc;
@@ -270,28 +271,46 @@ public:
 			cout << "Invalid date format!" << endl;
 		}
 		else {
-			//apply file handling to write dob
+			isValid = true;
+				doc = Doc;
+			CEP.open("sample.txt");
+				CEP << ("Date:", doc);
+				CEP.close();
+				cout << "Data written in file Successfully";
 		}
 	}
 	void set_Username() {
 		cout << "Enter your Username for page creation" << endl;
 		getline(cin, a);
 		Username = a;
+		CEP.open("sample.txt");
+		CEP << ("Username:", Username);
+		CEP.close();
+		cout << "Data written in file Successfully";
 	}
 	void set_Password() {
 		cout << "Set your 4 number pin" << endl;
 		cin >> A;
 		if (A > 999 && A < 10000) {
 			password = A;
+			 CEP.open("sample.txt");
+				CEP << ("password:", password);
+				CEP.close();
+				cout << "PIN set successfully" << end
 		}
 		else if (A < 999 || A > 10000) {
 			cout << "Invalid pin" << endl;
 		}
+		        
 	}
 	void set_Email() {
 		cout << "Enter your Email for page creation" << endl;
 		getline(cin, b);
 		email = b;
+		CEP.open("sample.txt");
+		CEP << ("Email:", email);
+		CEP.close();
+		cout << "Email set successfully" << endl;
 	}
 	void set_phno() {
 		cout << "Enter Your Phone Number" << endl;
@@ -301,6 +320,16 @@ public:
 		}
 		else {
 			cout << "Invalid Number" << endl;
+		}
+		// Write phone number to a file
+		ofstream CEP("sample.txt", ios::app);
+		if (CEP.is_open()) {
+			CEP << "Phone Number: " << phno << endl;
+			CEP.close();
+			cout << "Phone Number set successfully!" << endl;
+		}
+		else {
+			cout << "Error saving Phone Number to file!" << endl;
 		}
 	}
 	//apply file handling for class/file user and use inheritance for class user and page.
@@ -317,26 +346,57 @@ private:
 public:
 	friend class Sign_up_Page;
 
-	void Check_Username_pass(Sign_Up_Page& page) {
-		cout << "Enter Username: ";
-		cin.ignore();  // Clear buffer before reading input
-		getline(cin, User_name);
+	void Check_Username_pass() {
+	int attempts = 3;  
 
-		if (User_name == page.Username) {
-			cout << "You entered the correct username." << endl;
-			cout << "Enter your 4-digit pin: ";
+		while (attempts > 0) {
+			// Get user input
+			cout << "Enter Username: ";
+			getline(cin, User_name);
+			cout << "Enter password (4 digit): ";
 			cin >> pass_word;
 
-			if (pass_word == page.password) {
-				cout << "Login successful! Correct password." << endl;
+			ifstream CEP;
+			CEP.open("sample.txt");
+			CEP >> Username >> password;
+			CEP.close();
+			if (Username == User_name && password == pass_word) {
+				cout << "Username and password entered are correct." << endl;
+				cout << "Account logged in successfully." << endl;
+				return;
 			}
 			else {
-				cout << "Incorrect password! Please try again." << endl;
+				cout << "Invalid username or password. You have " << attempts - 1 << " attempt0s left." << endl;
 			}
+			attempts--;
+
+			// If no attempts are left, exit the program
+			if (attempts == 0) {
+				cout << "You have exceeded the maximum number of attempts. Exiting program..." << endl;
+				exit(0);  // Exit the program after 3 failed attempts
+			}
+			
+		
+		/*/if (strcmp(User_name.c_str(), Username.c_str()) == 0) {
+			cout << "You entered the right username" << endl;
 		}
 		else {
-			cout << "Invalid username. Access denied." << endl;
+			cout << "You entered the wrong Username" << endl;
 		}
+	       cout << "Enter 4 digit pin" << endl;
+		cin >> pass_word;
+		if (pass_word == acc.password) {
+			cout << "Correct passowrd" << endl;
+		}
+		else {
+			cout << "Re-enter your password" << endl;
+		}
+	};
+	*/
+	//apply file handling for class/file user and use inheritance for class user and page.
+	// Getters
+		
+	
 	}
 };
 class Post {
