@@ -696,38 +696,65 @@ class highlights {
 		}
 	}
 };
-class comment {
+class Comment {
 private:
-	string username;
-	string commenttext;
-	string taggeduser;
+    string username;
+    string commentText;
+    string taggedUser;
+
 public:
-	void addcommemt(){
-		// input of post
-		bool isValid=false;
-		do{
-		cout << "Enter Post Number" << endl;
-		getline(cin,username);
-	
-		cout << "Enter comment text " << endl;
-		getline(cin,commenttext);
-		if (commentText.empty()) {
-				cout << "Invalid comment.Try again." << endl;
-				return;
-			}
-		// file handling to find post 
-				char choice;
-				cout << "Do you want to tag a user? (y/n): ";
-				cin >> choice;
-				cin.ignore(); // Clear input buffer
-				if (choice == 'y' || choice == 'Y') {
-					cout << "Enter the username to tag: ";
-					getline(cin,taggedUser);
-				}
-		 else {
-		  taggedUser = "None";
-	  }
-	}while(!isValid);
+    void addComment() {
+        // Input of post
+        cout << "Enter Post Number: " << endl;
+        string postNumber;
+        getline(cin, postNumber);
+
+        cout << "Enter your username: " << endl;
+        getline(cin, username);
+
+        cout << "Enter comment text: " << endl;
+        getline(cin, commentText);
+
+        if (commentText.empty()) {
+            cout << "Invalid comment. Try again." << endl;
+            return;
+        }
+
+        // File handling to find post
+        string filename = "post_" + postNumber + ".txt";
+        ifstream postFile(filename);
+
+        if (!postFile) {
+            cout << "Post not found." << endl;
+            return;
+        }
+        postFile.close();
+
+        char choice;
+        cout << "Do you want to tag a user? (y/n): ";
+        cin >> choice;
+        cin.ignore(); // Clear input buffer
+
+        if (choice == 'y' || choice == 'Y') {
+            cout << "Enter the username to tag: ";
+            getline(cin, taggedUser);
+        } else {
+            taggedUser = "None";
+        }
+
+        // Append comment to post file
+        ofstream outFile(filename, ios::app);
+        if (outFile) {
+            outFile << "\nComment by " << username << ":\n";
+            outFile << commentText << endl;
+            if (taggedUser != "None") {
+                outFile << "Tagged user: " << taggedUser << endl;
+            }
+            cout << "Comment added successfully." << endl;
+        } else {
+            cout << "Error writing to file." << endl;
+        }
+    }
 };
 
 
